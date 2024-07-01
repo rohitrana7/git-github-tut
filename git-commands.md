@@ -1,3 +1,4 @@
+## git commands
 clone
 pull
 branch
@@ -10,10 +11,11 @@ pull request
 merge
 merge conflict
 stash
-stage
+add / stage
 checkout
 revert
 init
 status
 config
 log
+diff
