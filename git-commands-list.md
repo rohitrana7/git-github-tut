@@ -1,4 +1,4 @@
-## git commands
+## commonly used git commands
 1. clone
 2. pull
 3. branch
