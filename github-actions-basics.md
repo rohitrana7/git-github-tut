@@ -1,0 +1,79 @@
+## GitHub Actions 
+- workflows are automated scripts that run on GitHub's servers to perform various tasks such as building, testing, and deploying code.
+  Your workflow is defined in a YAML file (usually located in .github/workflows/)
+
+- workflow.yaml
+	```
+	on: [push]
+	
+	jobs:
+	  build:
+	    runs-on: ubuntu-latest
+	    steps:
+	      - uses: actions/checkout@v3
+	      - uses: actions/setup-node@v3
+	        with:
+	          node-version: '18'
+	```
+- "on" - The workflow is triggered by events specified in the on key. In this example, it runs when there is a push event.
+	  
+- "runs-on": ubuntu-latest: 
+	- This specifies the environment where your workflow will run. 
+	- GitHub provides hosted runners, which are virtual machines with pre-configured environments. 
+	- ubuntu-latest means your job will run on a virtual machine with the latest Ubuntu version available.
+
+- FYI: The runner(ubuntu-latest) pulls the action like "actions/checkout", "actions/setup-node", etc. from the GitHub Marketplace
+
+- "actions/checkout": This step clones your repository into the runner’s(ubuntu-latest) file system.
+
+- "actions/setup-node": This action installs the specified version of Node.js (version 18 in this case) on the runner.
+
+- Hosted Runners(ubuntu-latest): GitHub provides a hosted runner which is a virtual machine managed by GitHub. 
+	- These runners are ephemeral, meaning they are created for the duration of the job and destroyed afterwards. 
+	- They are pre-configured with various software and tools, making it easy to set up and run workflows without needing to manage the infrastructure.
+
+- GitHub Actions leverages AWS services like EC2 to provide scalable, isolated, and efficient environments for running workflows.
+	- Yes, GitHub Actions does utilize AWS EC2 for its runners, among other cloud providers. 
+	- GitHub hosts its runners on several major cloud platforms, including AWS, Azure, and Google Cloud. 
+	- The runners, which are virtual machines executing the workflows, are often provisioned on EC2 instances.
+
+- Checkout v4 marketplace- This action checks-out your repository, so your workflow can access it.
+	- Only a single commit is fetched by default, for the ref/SHA that triggered the workflow.
+	- The auth token is persisted in the local git config. This enables your scripts to run authenticated git commands. The token is removed during post-job cleanup. 
+
+- Fetch only the root files
+  ```
+	- uses: actions/checkout@v4
+	  with:
+	    sparse-checkout: .
+  ```
+	
+- Fetch only the root files and .github and src folder
+  ```
+	- uses: actions/checkout@v4
+	  with:
+	    sparse-checkout: |
+	      .github
+	      src
+  ```
+	  
+- Checkout a different branch
+  ```
+	- uses: actions/checkout@v4
+	  with:
+	    ref: my-branch
+  ```
+	
+- Setup Node.js environment v4 marketplace- optionally downloading and caching distribution of the requested Node.js version, and adding it to the PATH
+	- Optionally caching npm/yarn/pnpm dependencies. E.g.:
+   	```
+	steps:
+	- uses: actions/checkout@v4
+	- uses: actions/setup-node@v4
+	  with:
+	    node-version: 18
+	- run: npm ci
+	- run: npm test
+  	```
+
+- The node-version input is optional. If not supplied, the node version from PATH will be used. However, it is recommended to always specify Node.js version and don't rely on the system one.
